@@ -27,6 +27,7 @@ namespace UnityStandardAssets.Characters.FirstPerson
         [SerializeField] private float m_StepInterval;
         [SerializeField] private AudioClip m_FootstepSound;    // an array of footstep sounds that will be randomly selected from.
         [SerializeField] Animator _anim;
+        [SerializeField] Rigidbody _rb;
         private Camera m_Camera;
         private bool m_Jump;
         private float m_YRotation;
@@ -125,11 +126,18 @@ namespace UnityStandardAssets.Characters.FirstPerson
         {
             if (!m_AudioSource.isPlaying && m_CharacterController.velocity.sqrMagnitude > 0)
             {
-                _anim.SetBool("IsMoving", true);
-                muted=false;
+                if (_rb.worldCenterOfMass.y > -1.5)
+                {
+                    _anim.SetBool("IsMoving", true);
+                }
+                muted =false;
                 m_AudioSource.volume = 1f;
                 m_AudioSource.clip = m_FootstepSound;
                 m_AudioSource.Play();
+            }
+            if (_rb.worldCenterOfMass.y < -1.5)
+            {
+                _anim.SetBool("IsMoving", false);
             }
             if (m_CharacterController.velocity.sqrMagnitude == 0f && !muted)
             {

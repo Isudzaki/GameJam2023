@@ -1,9 +1,11 @@
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using DG.Tweening;
 
 public class Teleport : MonoBehaviour
 {
     [SerializeField] Transform _effect;
+    [SerializeField] AudioSource _music;
     private SceneChangerEffect _sceneEffect;
     private Scene _scene;
     private bool canAct;
@@ -17,6 +19,14 @@ public class Teleport : MonoBehaviour
     {
         if (Input.GetKeyDown(KeyCode.E) && canAct)
         {
+            if (_scene.name == "TopLevel")
+            {
+                _music.DOPitch(0.25f, 1);
+            }
+            else
+            {
+                _music.DOPitch(1.75f, 1);
+            }
             canAct = false;
             _sceneEffect.FadeIn();
         }
@@ -39,7 +49,13 @@ public class Teleport : MonoBehaviour
     }
     public void SceneChange()
     {
-        if (_scene.name == "TopLevel") SceneManager.LoadScene("BottomLevel");
-        else SceneManager.LoadScene("TopLevel");
+        if (_scene.name == "TopLevel")
+        {
+            SceneManager.LoadScene("BottomLevel");
+        }
+        else
+        {
+            SceneManager.LoadScene("TopLevel");
+        }
     }
 }
