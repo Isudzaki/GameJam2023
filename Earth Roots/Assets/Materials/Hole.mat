@@ -99,7 +99,7 @@ Material:
     - _NormalStrength1: 0.37
     - _NormalStrength2: 0.8
     - _OcclusionStrength: 1
-    - _OutlineWidth: 0.01
+    - _OutlineWidth: 0
     - _Parallax: 0.02
     - _Smoothness: 0.5
     - _SmoothnessTextureChannel: 1
