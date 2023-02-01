@@ -20,6 +20,7 @@ public class LevelChanger : MonoBehaviour
     }
     private void ChangeScene()
     {
+        Variables.placeSpawn =0;
         SceneManager.LoadScene("TopLevel");
     }
 }

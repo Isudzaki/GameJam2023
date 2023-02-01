@@ -3,7 +3,7 @@ using UnityEngine;
 using UnityStandardAssets.CrossPlatformInput;
 using UnityStandardAssets.Utility;
 using DG.Tweening;
-using Random = UnityEngine.Random;
+using UnityEngine.SceneManagement;
 
 #pragma warning disable 618, 649
 namespace UnityStandardAssets.Characters.FirstPerson
@@ -12,13 +12,14 @@ namespace UnityStandardAssets.Characters.FirstPerson
     [RequireComponent(typeof (AudioSource))]
     public class FirstPersonController : MonoBehaviour
     {
+        [SerializeField] private Transform player; 
         [SerializeField] private bool m_IsWalking;
         [SerializeField] private float m_WalkSpeed;
         [SerializeField] [Range(0f, 1f)] private float m_RunstepLenghten;
         [SerializeField] private float m_JumpSpeed;
         [SerializeField] private float m_StickToGroundForce;
         [SerializeField] private float m_GravityMultiplier;
-        [SerializeField] private MouseLook m_MouseLook;
+        [SerializeField] public MouseLook m_MouseLook;
         [SerializeField] private bool m_UseFovKick;
         [SerializeField] private FOVKick m_FovKick = new FOVKick();
         [SerializeField] private bool m_UseHeadBob;
@@ -26,8 +27,14 @@ namespace UnityStandardAssets.Characters.FirstPerson
         [SerializeField] private LerpControlledBob m_JumpBob = new LerpControlledBob();
         [SerializeField] private float m_StepInterval;
         [SerializeField] private AudioClip m_FootstepSound;    // an array of footstep sounds that will be randomly selected from.
-        [SerializeField] Animator _anim;
-        [SerializeField] Rigidbody _rb;
+        [SerializeField] private Animator _anim;
+        [SerializeField] private Rigidbody _rb;
+        [SerializeField] private AxeTrigger _axeTrigger;
+        [SerializeField] GameObject pickAxe;
+        [SerializeField] ConfigurableJoint _conf;
+        [SerializeField] Rigidbody pickAxeRb;
+        private bool _axeAdded;
+        private Scene _scene;
         private Camera m_Camera;
         private bool m_Jump;
         private float m_YRotation;
@@ -46,6 +53,7 @@ namespace UnityStandardAssets.Characters.FirstPerson
         // Use this for initialization
         private void Start()
         {
+            _scene = SceneManager.GetActiveScene();
             m_CharacterController = GetComponent<CharacterController>();
             m_Camera = Camera.main;
             m_OriginalCameraPosition = m_Camera.transform.localPosition;
@@ -62,6 +70,16 @@ namespace UnityStandardAssets.Characters.FirstPerson
         // Update is called once per frame
         private void Update()
         {
+            if (Variables.pickaxeAdd==1 && !_axeAdded)
+            {
+                _conf.connectedBody = pickAxeRb;
+                _axeAdded=true;
+                pickAxe.SetActive(true);
+            }
+            if (Variables.pickaxeAdd == 1)
+            {
+                Mining();
+            }
             RotateView();
             // the jump state needs to read here to make sure it is not missed
             if (!m_Jump)
@@ -126,18 +144,18 @@ namespace UnityStandardAssets.Characters.FirstPerson
         {
             if (!m_AudioSource.isPlaying && m_CharacterController.velocity.sqrMagnitude > 0)
             {
-                if (_rb.worldCenterOfMass.y > -1.5)
+                if (_axeTrigger._isMinerZone == false)
                 {
                     _anim.SetBool("IsMoving", true);
+                }
+                else if (_axeTrigger._isMinerZone == true)
+                {
+                    _anim.SetBool("IsMoving", false);
                 }
                 muted =false;
                 m_AudioSource.volume = 1f;
                 m_AudioSource.clip = m_FootstepSound;
                 m_AudioSource.Play();
-            }
-            if (_rb.worldCenterOfMass.y < -1.5)
-            {
-                _anim.SetBool("IsMoving", false);
             }
             if (m_CharacterController.velocity.sqrMagnitude == 0f && !muted)
             {
@@ -222,8 +240,9 @@ namespace UnityStandardAssets.Characters.FirstPerson
         {
             m_MouseLook.LookRotation (transform, m_Camera.transform);
         }
-
-
+        private void Mining()
+        {
+        }
         private void OnControllerColliderHit(ControllerColliderHit hit)
         {
             Rigidbody body = hit.collider.attachedRigidbody;

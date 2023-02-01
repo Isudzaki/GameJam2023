@@ -7,7 +7,7 @@ Material:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: House
+  m_Name: OutLine
   m_Shader: {fileID: 4800000, guid: a9a8211f737bfbd4fb8a469399c59177, type: 3}
   m_ValidKeywords: []
   m_InvalidKeywords: []
@@ -41,14 +41,26 @@ Material:
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _MainTex:
-        m_Texture: {fileID: 2800000, guid: c6e2d86ca8f66c3418d1b374b431825e, type: 3}
-        m_Scale: {x: 1, y: 1}
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 2, y: 2}
         m_Offset: {x: 0, y: 0}
     - _MetallicGlossMap:
         m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
+    - _NoiseTex:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
     - _Normal:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _Normal1:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _Normal2:
         m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
@@ -60,24 +72,36 @@ Material:
         m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
+    - _SnowNormal:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
     m_Ints: []
     m_Floats:
+    - _BlurAmount: 0
     - _BumpScale: 1
     - _Cull: 0
-    - _Cutoff: 0.433
+    - _Cutoff: 0.74
     - _DetailNormalMapScale: 1
     - _DstBlend: 0
+    - _EdgeWidth: 0.21
+    - _FresnelPower: 3.9
     - _GlossMapScale: 1
-    - _Glossiness: 0.5
+    - _Glossiness: 0.04
     - _GlossyReflections: 1
-    - _Metallic: 0
+    - _Metallic: 0.03
     - _Mode: 0
     - _NormalStrength: 1
+    - _NormalStrength1: 0.44
+    - _NormalStrength2: 0.62
     - _OcclusionStrength: 1
     - _OutlineWidth: 0
     - _Parallax: 0.02
     - _Smoothness: 0.519
     - _SmoothnessTextureChannel: 0
+    - _SnowAmount: 0.09
+    - _SnowGlossiness: 0.22
+    - _SnowMetallic: 0
     - _SpecularHighlights: 1
     - _Speed: 1
     - _SrcBlend: 1
@@ -85,7 +109,13 @@ Material:
     - _ZWrite: 1
     m_Colors:
     - _Color: {r: 1, g: 1, b: 1, a: 1}
+    - _EdgeColor: {r: 1, g: 1, b: 1, a: 1}
     - _EmissionColor: {r: 0, g: 0, b: 0, a: 1}
-    - _OutlineColor: {r: 1, g: 1, b: 1, a: 1}
+    - _FlowDirection1: {r: 0.05, g: 0, b: 0, a: 1}
+    - _FlowDirection2: {r: 0, g: 0.05, b: 0, a: 1}
+    - _OutlineColor: {r: 0, g: 1, b: 0.029830456, a: 1}
+    - _ScrollDirection: {r: 0, g: 0, b: 0, a: 0}
+    - _SnowColor: {r: 1, g: 1, b: 1, a: 1}
+    - _SnowDirection: {r: 0, g: 1, b: 0, a: 1}
     - _WindDirection: {r: 1, g: 0, b: 1, a: 1}
   m_BuildTextureStacks: []

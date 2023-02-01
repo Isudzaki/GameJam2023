@@ -11,6 +11,7 @@ public class SceneChangerEffect : MonoBehaviour
     }
     public void FadeIn()
     {
+        Variables.placeSpawn = 1;
         DOTween.Sequence()
            .Append(transform.DOScale(new Vector3(1, 1, 1), 1))
            .AppendCallback(_teleport.SceneChange);
