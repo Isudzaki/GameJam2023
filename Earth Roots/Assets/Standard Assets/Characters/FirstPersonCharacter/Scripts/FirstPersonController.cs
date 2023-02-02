@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using UnityEngine;
 using UnityStandardAssets.CrossPlatformInput;
 using UnityStandardAssets.Utility;
@@ -33,6 +34,10 @@ namespace UnityStandardAssets.Characters.FirstPerson
         [SerializeField] GameObject pickAxe;
         [SerializeField] ConfigurableJoint _conf;
         [SerializeField] Rigidbody pickAxeRb;
+        [SerializeField] private AudioSource _pickaxeAudioSource;
+        [SerializeField] private AudioClip _pickAxeDig;
+        [SerializeField] private AudioClip _pickAxeBroke;
+        [SerializeField] private Transform _floor;
         private bool _axeAdded;
         private Scene _scene;
         private Camera m_Camera;
@@ -49,10 +54,12 @@ namespace UnityStandardAssets.Characters.FirstPerson
         private bool m_Jumping;
         private bool muted;
         private AudioSource m_AudioSource;
-
-        // Use this for initialization
+        private bool _canDig;
+        public float _zoneTime;
+        private bool _breakAxe;
         private void Start()
         {
+            _canDig = true;
             _scene = SceneManager.GetActiveScene();
             m_CharacterController = GetComponent<CharacterController>();
             m_Camera = Camera.main;
@@ -66,19 +73,44 @@ namespace UnityStandardAssets.Characters.FirstPerson
 			m_MouseLook.Init(transform , m_Camera.transform);
         }
 
-
-        // Update is called once per frame
         private void Update()
         {
+            if (Variables.pickaxeBreak <= 0f && !_breakAxe)
+            {
+                _breakAxe = true;
+                _pickaxeAudioSource.clip = _pickAxeBroke;
+                _pickaxeAudioSource.Play();
+            }
+            if (Variables.pickaxeBreak <= 0.1f)
+            {
+                pickAxe.SetActive(false);
+            }
+            if (Variables.pickaxeBreak == 1)
+            {
+                _breakAxe = false;
+            }
+            if (player.position.y > -10f)
+            {
+                _zoneTime = 2f;
+            }
+            else if(player.position.y < -10f && player.position.y > -15f)
+            {
+                _zoneTime = 8f;
+            }
+            else
+            {
+                _zoneTime = 15f;
+            }
             if (Variables.pickaxeAdd==1 && !_axeAdded)
             {
                 _conf.connectedBody = pickAxeRb;
                 _axeAdded=true;
                 pickAxe.SetActive(true);
             }
-            if (Variables.pickaxeAdd == 1)
+            if (Variables.pickaxeAdd == 1 && _axeTrigger._isMinerZone == true && _scene.name=="BottomLevel" && !_breakAxe)
             {
                 Mining();
+                _floor = GameObject.FindGameObjectWithTag("Floor").GetComponent<Transform>();
             }
             RotateView();
             // the jump state needs to read here to make sure it is not missed
@@ -242,16 +274,40 @@ namespace UnityStandardAssets.Characters.FirstPerson
         }
         private void Mining()
         {
+            if (!_canDig && !_pickaxeAudioSource.isPlaying && Input.GetMouseButton(0))
+            {
+                _pickaxeAudioSource.clip = _pickAxeDig;
+                _pickaxeAudioSource.Play();
+            }
+            if(Input.GetMouseButton(0) && _canDig)
+            {
+                StartCoroutine(Dig());
+            }
+        }
+        private IEnumerator Dig()
+        {
+            _canDig = false;
+            yield return new WaitForSeconds(_zoneTime);
+            if (Input.GetMouseButton(0))
+            {
+                Variables.pickaxeBreak -= 0.05f;
+                _floor.position = new Vector3(_floor.position.x, _floor.position.y-0.5f, _floor.position.z);
+                _canDig = true;
+                 yield return Dig();
+            }
+            else
+            {
+                _canDig = true;
+                yield break;
+            }
         }
         private void OnControllerColliderHit(ControllerColliderHit hit)
         {
             Rigidbody body = hit.collider.attachedRigidbody;
-            //dont move the rigidbody if the character is on top of it
             if (m_CollisionFlags == CollisionFlags.Below)
             {
                 return;
             }
-
             if (body == null || body.isKinematic)
             {
                 return;

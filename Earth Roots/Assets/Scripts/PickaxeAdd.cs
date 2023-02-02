@@ -29,6 +29,7 @@ public class PickaxeAdd : MonoBehaviour
     }
     private void AddPickaxe()
     {
+        Variables.pickaxeBreak = 1;
         Variables.pickaxeAdd = 1;
         PlayerPrefs.SetInt("PickAxe",1);
         gameObject.SetActive(false);

@@ -4,6 +4,6 @@ public class SpriteRotate : MonoBehaviour
 {
     void Update()
     {
-        transform.rotation=Quaternion.Euler(0, Camera.main.transform.rotation.eulerAngles.y, 0);
+        transform.rotation=Quaternion.Euler(transform.rotation.x, Camera.main.transform.rotation.eulerAngles.y, transform.rotation.z);
     }
 }
