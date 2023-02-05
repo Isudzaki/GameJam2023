@@ -27,7 +27,7 @@ public class SpawnCoins : MonoBehaviour
     }
     private IEnumerator Spawn()
     {
-        yield return new WaitForSeconds(Random.Range(5, 10));
+        yield return new WaitForSeconds(Random.Range(15, 30));
         if (_canAdd)
         {
             newCoin = Instantiate(_coin, gameObject.transform.position, Quaternion.identity);

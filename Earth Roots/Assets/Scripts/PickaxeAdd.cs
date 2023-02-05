@@ -9,30 +9,34 @@ public class PickaxeAdd : MonoBehaviour
     [SerializeField] AudioClip _trigger;
     [SerializeField] SpriteRenderer _ESprite;
     private bool _canAct;
-    private void Start()
-    {
-        if (Variables.pickaxeAdd == 1)
-        {
-            gameObject.SetActive(false);
-        }
-    }
     private void Update()
     {
-        if(_canAct && Input.GetKeyDown(KeyCode.E))
+        if (Variables.coins >= 10 && Variables.pickaxeAdd == 0)
         {
+            for (int i = 0; i < _meshes.Length; i++)
+            {
+                _meshes[i].material.SetColor("_OutlineColor", Color.green);
+            }
+        }
+        else
+        {
+            for (int i = 0; i < _meshes.Length; i++)
+            {
+                _meshes[i].material.SetColor("_OutlineColor", Color.red);
+            }
+        }
+        if(_canAct && Input.GetKeyDown(KeyCode.E) && Variables.coins>=10 && Variables.pickaxeAdd==0)
+        {
+            Variables.coins -= 10;
             _sounds.clip = _button;
             _sounds.Play();
-            DOTween.Sequence()
-                .Append(transform.DOScale(new Vector3(0, 0, 0), 0.25f))
-                .AppendCallback(AddPickaxe);
+            AddPickaxe();
         }
     }
     private void AddPickaxe()
     {
-        Variables.pickaxeBreak = 1;
+        Variables.pickaxeBreak = 5;
         Variables.pickaxeAdd = 1;
-        PlayerPrefs.SetInt("PickAxe",1);
-        gameObject.SetActive(false);
     }
     private void OnTriggerEnter(Collider other)
     {

@@ -13,6 +13,13 @@ public class LevelChanger : MonoBehaviour
     }
     public void FadeIn()
     {
+        Variables.hungerTimer = 60;
+        Variables.hunger = 5;
+        Variables.coins = 0;
+        Variables.pickaxeAdd = 0;
+        Variables.zone = 0;
+        Variables.win = false;
+        Variables.gameOver = false;
         _music.DOFade(0f, 1);
         DOTween.Sequence()
            .Append(_changer.DOFade(1, 1))

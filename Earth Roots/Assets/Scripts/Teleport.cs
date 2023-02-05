@@ -12,6 +12,7 @@ public class Teleport : MonoBehaviour
     [SerializeField] SpriteRenderer _ESprite;
     private SceneChangerEffect _sceneEffect;
     private Scene _scene;
+    private Tween _fadeAnim;
     private bool canAct;
 
     private void Start()
@@ -42,7 +43,8 @@ public class Teleport : MonoBehaviour
         if (other.gameObject.tag == "Player")
         {
             _ESprite.gameObject.SetActive(true);
-            _ESprite.DOFade(1, 0.5f);
+            _fadeAnim.Kill();
+            _fadeAnim= _ESprite.DOFade(1, 0.5f);
             canAct = true;
             _sounds.clip = _trigger;
             _sounds.Play();
@@ -57,8 +59,9 @@ public class Teleport : MonoBehaviour
     {
         if (other.gameObject.tag == "Player")
         {
+            _fadeAnim.Kill();
             DOTween.Sequence()
-                .Append(_ESprite.DOFade(0, 0.3f))
+                .Append(_fadeAnim=_ESprite.DOFade(0, 0.3f))
                 .AppendCallback(SpriteFade);
             canAct = false;
             //e img hide

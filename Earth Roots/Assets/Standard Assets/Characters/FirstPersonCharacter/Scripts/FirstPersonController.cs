@@ -71,110 +71,138 @@ namespace UnityStandardAssets.Characters.FirstPerson
             m_Jumping = false;
             m_AudioSource = GetComponent<AudioSource>();
 			m_MouseLook.Init(transform , m_Camera.transform);
+            if (_scene.name == "BottomLevel")
+            {
+                _floor = GameObject.FindGameObjectWithTag("Floor").GetComponent<Transform>();
+                _floor.position = new Vector3(_floor.position.x, _floor.position.y - Variables.deep, _floor.position.z);
+            }
         }
 
         private void Update()
         {
-            if (Variables.pickaxeBreak <= 0f && !_breakAxe)
+            if(Variables.gameOver && Input.GetKeyDown(KeyCode.Escape))
             {
-                _breakAxe = true;
-                _pickaxeAudioSource.clip = _pickAxeBroke;
-                _pickaxeAudioSource.Play();
+                SceneManager.LoadScene("Menu");
             }
-            if (Variables.pickaxeBreak <= 0.1f)
+            if (!Variables.gameOver)
             {
-                pickAxe.SetActive(false);
-            }
-            if (Variables.pickaxeBreak == 1)
-            {
-                _breakAxe = false;
-            }
-            if (player.position.y > -10f)
-            {
-                _zoneTime = 2f;
-            }
-            else if(player.position.y < -10f && player.position.y > -15f)
-            {
-                _zoneTime = 8f;
-            }
-            else
-            {
-                _zoneTime = 15f;
-            }
-            if (Variables.pickaxeAdd==1 && !_axeAdded)
-            {
-                _conf.connectedBody = pickAxeRb;
-                _axeAdded=true;
-                pickAxe.SetActive(true);
-            }
-            if (Variables.pickaxeAdd == 1 && _axeTrigger._isMinerZone == true && _scene.name=="BottomLevel" && !_breakAxe)
-            {
-                Mining();
-                _floor = GameObject.FindGameObjectWithTag("Floor").GetComponent<Transform>();
-            }
-            RotateView();
-            // the jump state needs to read here to make sure it is not missed
-            if (!m_Jump)
-            {
-                m_Jump = CrossPlatformInputManager.GetButtonDown("Jump");
-            }
+                if (!m_AudioSource.isPlaying && m_CharacterController.velocity.sqrMagnitude > 0)
+                {
+                    muted = false;
+                    m_AudioSource.volume = 1f;
+                    m_AudioSource.clip = m_FootstepSound;
+                    m_AudioSource.Play();
+                }
+                if (_canDig)
+                {
+                    _anim.SetBool("IsDigging", false);
+                }
+                else
+                {
+                    _anim.SetBool("IsDigging", true);
+                }
+                if (Variables.pickaxeBreak <= 0f && !_breakAxe)
+                {
+                    Variables.pickaxeAdd = 0;
+                    _breakAxe = true;
+                    _pickaxeAudioSource.clip = _pickAxeBroke;
+                    _pickaxeAudioSource.Play();
+                }
+                if (Variables.pickaxeBreak <= 0f)
+                {
+                    pickAxe.SetActive(false);
+                }
+                if (Variables.pickaxeBreak == 1)
+                {
+                    _breakAxe = false;
+                }
+                if (player.position.y > -10f)
+                {
+                    _zoneTime = 1f;
+                    Variables.zone = 1;
+                }
+                else if (player.position.y < -10f && player.position.y > -15f)
+                {
+                    _zoneTime = 1f;
+                    Variables.zone = 2;
+                }
+                else if (player.position.y < -15f && player.position.y > -20f)
+                {
+                    _zoneTime = 1f;
+                    Variables.zone = 3;
+                }
+                if (Variables.pickaxeAdd == 1 && !_axeAdded)
+                {
+                    _conf.connectedBody = pickAxeRb;
+                    _axeAdded = true;
+                    pickAxe.SetActive(true);
+                }
+                if (Variables.pickaxeAdd == 1 && _axeTrigger._isMinerZone == true && _scene.name == "BottomLevel" && !_breakAxe && !Variables.chestSpawned)
+                {
+                    Mining();
+                }
+                RotateView();
+                // the jump state needs to read here to make sure it is not missed
 
-            if (!m_PreviouslyGrounded && m_CharacterController.isGrounded)
-            {
-                StartCoroutine(m_JumpBob.DoBobCycle());
-                m_MoveDir.y = 0f;
-                m_Jumping = false;
-            }
-            if (!m_CharacterController.isGrounded && !m_Jumping && m_PreviouslyGrounded)
-            {
-                m_MoveDir.y = 0f;
-            }
 
-            m_PreviouslyGrounded = m_CharacterController.isGrounded;
+                if (!m_PreviouslyGrounded && m_CharacterController.isGrounded)
+                {
+                    StartCoroutine(m_JumpBob.DoBobCycle());
+                    m_MoveDir.y = 0f;
+                    m_Jumping = false;
+                }
+                if (!m_CharacterController.isGrounded && !m_Jumping && m_PreviouslyGrounded)
+                {
+                    m_MoveDir.y = 0f;
+                }
+
+                m_PreviouslyGrounded = m_CharacterController.isGrounded;
+            }
         }
         private void FixedUpdate()
         {
-            float speed;
-            GetInput(out speed);
-            // always move along the camera forward as it is the direction that it being aimed at
-            Vector3 desiredMove = transform.forward*m_Input.y + transform.right*m_Input.x;
-
-            // get a normal for the surface that is being touched to move along it
-            RaycastHit hitInfo;
-            Physics.SphereCast(transform.position, m_CharacterController.radius, Vector3.down, out hitInfo,
-                               m_CharacterController.height/2f, Physics.AllLayers, QueryTriggerInteraction.Ignore);
-            desiredMove = Vector3.ProjectOnPlane(desiredMove, hitInfo.normal).normalized;
-
-            m_MoveDir.x = desiredMove.x*speed;
-            m_MoveDir.z = desiredMove.z*speed;
-
-
-            if (m_CharacterController.isGrounded)
+            if (!Variables.gameOver)
             {
-                m_MoveDir.y = -m_StickToGroundForce;
+                float speed;
+                GetInput(out speed);
+                // always move along the camera forward as it is the direction that it being aimed at
+                Vector3 desiredMove = transform.forward * m_Input.y + transform.right * m_Input.x;
 
-                if (m_Jump)
+                // get a normal for the surface that is being touched to move along it
+                RaycastHit hitInfo;
+                Physics.SphereCast(transform.position, m_CharacterController.radius, Vector3.down, out hitInfo,
+                                   m_CharacterController.height / 2f, Physics.AllLayers, QueryTriggerInteraction.Ignore);
+                desiredMove = Vector3.ProjectOnPlane(desiredMove, hitInfo.normal).normalized;
+
+                m_MoveDir.x = desiredMove.x * speed;
+                m_MoveDir.z = desiredMove.z * speed;
+
+
+                if (m_CharacterController.isGrounded)
                 {
-                    m_MoveDir.y = m_JumpSpeed;
-                    m_Jump = false;
-                    m_Jumping = true;
+                    m_MoveDir.y = -m_StickToGroundForce;
+
+                    if (m_Jump)
+                    {
+                        m_MoveDir.y = m_JumpSpeed;
+                        m_Jump = false;
+                        m_Jumping = true;
+                    }
                 }
-            }
-            else
-            {
-                m_MoveDir += Physics.gravity*m_GravityMultiplier*Time.fixedDeltaTime;
-            }
-            m_CollisionFlags = m_CharacterController.Move(m_MoveDir*Time.fixedDeltaTime);
+                else
+                {
+                    m_MoveDir += Physics.gravity * m_GravityMultiplier * Time.fixedDeltaTime;
+                }
+                m_CollisionFlags = m_CharacterController.Move(m_MoveDir * Time.fixedDeltaTime);
 
-            ProgressStepCycle(speed);
-            UpdateCameraPosition(speed);
-
-            m_MouseLook.UpdateCursorLock();
+                ProgressStepCycle(speed);
+                UpdateCameraPosition(speed);
+            }
         }
 
         private void ProgressStepCycle(float speed)
         {
-            if (!m_AudioSource.isPlaying && m_CharacterController.velocity.sqrMagnitude > 0)
+            if (m_CharacterController.velocity.sqrMagnitude > 0)
             {
                 if (_axeTrigger._isMinerZone == false)
                 {
@@ -184,10 +212,6 @@ namespace UnityStandardAssets.Characters.FirstPerson
                 {
                     _anim.SetBool("IsMoving", false);
                 }
-                muted =false;
-                m_AudioSource.volume = 1f;
-                m_AudioSource.clip = m_FootstepSound;
-                m_AudioSource.Play();
             }
             if (m_CharacterController.velocity.sqrMagnitude == 0f && !muted)
             {
@@ -279,7 +303,7 @@ namespace UnityStandardAssets.Characters.FirstPerson
                 _pickaxeAudioSource.clip = _pickAxeDig;
                 _pickaxeAudioSource.Play();
             }
-            if(Input.GetMouseButton(0) && _canDig)
+            if (Input.GetMouseButton(0) && _canDig)
             {
                 StartCoroutine(Dig());
             }
@@ -292,6 +316,7 @@ namespace UnityStandardAssets.Characters.FirstPerson
             {
                 Variables.pickaxeBreak -= 0.05f;
                 _floor.position = new Vector3(_floor.position.x, _floor.position.y-0.5f, _floor.position.z);
+                Variables.deep += 0.5f;
                 _canDig = true;
                  yield return Dig();
             }
