@@ -57,6 +57,7 @@ namespace UnityStandardAssets.Characters.FirstPerson
         private bool _canDig;
         public float _zoneTime;
         private bool _breakAxe;
+        private float _breakValue;
         private void Start()
         {
             _canDig = true;
@@ -73,6 +74,10 @@ namespace UnityStandardAssets.Characters.FirstPerson
 			m_MouseLook.Init(transform , m_Camera.transform);
             if (_scene.name == "BottomLevel")
             {
+                if (Variables.interactWorm1 == 1)
+                {
+                    Variables.interactCave = 1;
+                }
                 _floor = GameObject.FindGameObjectWithTag("Floor").GetComponent<Transform>();
                 _floor.position = new Vector3(_floor.position.x, _floor.position.y - Variables.deep, _floor.position.z);
             }
@@ -118,18 +123,21 @@ namespace UnityStandardAssets.Characters.FirstPerson
                 }
                 if (player.position.y > -10f)
                 {
-                    _zoneTime = 1f;
+                    _zoneTime = 2f;
                     Variables.zone = 1;
+                    _breakValue = 0.05f;
                 }
                 else if (player.position.y < -10f && player.position.y > -15f)
                 {
-                    _zoneTime = 1f;
+                    _zoneTime = 5f;
                     Variables.zone = 2;
+                    _breakValue = 0.1f;
                 }
                 else if (player.position.y < -15f && player.position.y > -20f)
                 {
-                    _zoneTime = 1f;
+                    _zoneTime = 10f;
                     Variables.zone = 3;
+                    _breakValue = 0.15f;
                 }
                 if (Variables.pickaxeAdd == 1 && !_axeAdded)
                 {
@@ -314,7 +322,7 @@ namespace UnityStandardAssets.Characters.FirstPerson
             yield return new WaitForSeconds(_zoneTime);
             if (Input.GetMouseButton(0))
             {
-                Variables.pickaxeBreak -= 0.05f;
+                Variables.pickaxeBreak -= _breakValue;
                 _floor.position = new Vector3(_floor.position.x, _floor.position.y-0.5f, _floor.position.z);
                 Variables.deep += 0.5f;
                 _canDig = true;

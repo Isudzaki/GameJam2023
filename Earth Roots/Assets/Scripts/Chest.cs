@@ -7,6 +7,7 @@ public class Chest : MonoBehaviour
     [SerializeField] AudioClip _winSound;
     [SerializeField] AudioClip _trigger;
     [SerializeField] SpriteRenderer _ESprite;
+    [SerializeField] AudioSource _chest;
     private Tween _fadeAnim;
     private bool canAct;
 
@@ -18,6 +19,7 @@ public class Chest : MonoBehaviour
              Variables.win=true;
             _sounds.Play();
             canAct = false;
+            _chest.enabled = false;
         }
     }
     private void OnTriggerEnter(Collider other)

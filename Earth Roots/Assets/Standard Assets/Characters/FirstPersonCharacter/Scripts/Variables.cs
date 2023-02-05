@@ -14,4 +14,6 @@ public static class Variables
     public static bool win;
     public static bool gameOver;
     public static bool chestSpawned;
+    public static int interactCave;
+    public static int questNum;
 }

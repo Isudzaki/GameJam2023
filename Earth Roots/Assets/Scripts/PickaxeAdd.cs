@@ -35,7 +35,7 @@ public class PickaxeAdd : MonoBehaviour
     }
     private void AddPickaxe()
     {
-        Variables.pickaxeBreak = 5;
+        Variables.pickaxeBreak = 1;
         Variables.pickaxeAdd = 1;
     }
     private void OnTriggerEnter(Collider other)
