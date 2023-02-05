@@ -11,7 +11,7 @@ public class Hunger : MonoBehaviour
     {
         if (Variables.hungerTimer <= 0)
         {
-            Variables.hungerTimer = 60;
+            Variables.hungerTimer = 50;
             Variables.hunger--;
         }
     }

@@ -13,7 +13,7 @@ public class LevelChanger : MonoBehaviour
     }
     public void FadeIn()
     {
-        Variables.hungerTimer = 60;
+        Variables.hungerTimer = 50;
         Variables.hunger = 5;
         Variables.coins = 0;
         Variables.pickaxeAdd = 0;
