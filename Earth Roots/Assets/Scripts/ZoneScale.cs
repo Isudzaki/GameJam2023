@@ -4,6 +4,7 @@ using DG.Tweening;
 public class ZoneScale : MonoBehaviour
 {
     [SerializeField] RectTransform _moleHead;
+    [SerializeField] MeshRenderer floor;
     void Update()
     {
         if (Variables.zone == 1)

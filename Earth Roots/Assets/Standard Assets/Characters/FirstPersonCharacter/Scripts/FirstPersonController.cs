@@ -74,7 +74,7 @@ namespace UnityStandardAssets.Characters.FirstPerson
 			m_MouseLook.Init(transform , m_Camera.transform);
             if (_scene.name == "BottomLevel")
             {
-                if (Variables.interactWorm1 == 1)
+                if (Variables.pickaxeAdd == 1)
                 {
                     Variables.interactCave = 1;
                 }
