@@ -16,4 +16,6 @@ public static class Variables
     public static bool chestSpawned;
     public static int interactCave;
     public static int questNum;
+    public static float music;
+    public static bool isPaused;
 }

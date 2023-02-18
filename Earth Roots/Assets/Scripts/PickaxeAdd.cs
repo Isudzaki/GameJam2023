@@ -53,17 +53,12 @@ public class PickaxeAdd : MonoBehaviour
             }
         }
     }
-    private void SpriteFade()
-    {
-        _ESprite.gameObject.SetActive(false);
-    }
     private void OnTriggerExit(Collider other)
     {
         if (other.gameObject.tag == "Player")
         {
             DOTween.Sequence()
-         .Append(_ESprite.DOFade(0, 0.3f))
-         .AppendCallback(SpriteFade);
+         .Append(_ESprite.DOFade(0, 0.3f));
             _canAct = false;
             for (int i = 0; i < _meshes.Length; i++)
             {

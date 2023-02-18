@@ -51,18 +51,13 @@ public class Teleport : MonoBehaviour
             //e img show
         }
     }
-    private void SpriteFade()
-    {
-        _ESprite.gameObject.SetActive(false);
-    }
     private void OnTriggerExit(Collider other)
     {
         if (other.gameObject.tag == "Player")
         {
             _fadeAnim.Kill();
             DOTween.Sequence()
-                .Append(_fadeAnim=_ESprite.DOFade(0, 0.3f))
-                .AppendCallback(SpriteFade);
+                .Append(_fadeAnim = _ESprite.DOFade(0, 0.3f));
             canAct = false;
             //e img hide
         }

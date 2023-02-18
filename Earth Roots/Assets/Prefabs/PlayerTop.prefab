@@ -619,7 +619,7 @@ MonoBehaviour:
     YSensitivity: 2
     clampVerticalRotation: 1
     MinimumX: -60
-    MaximumX: 90
+    MaximumX: 55
     smooth: 0
     smoothTime: 5
     lockCursor: 1
@@ -899,7 +899,7 @@ Camera:
     width: 1
     height: 1
   near clip plane: 0.3
-  far clip plane: 300
+  far clip plane: 200
   field of view: 60
   orthographic: 0
   orthographic size: 5

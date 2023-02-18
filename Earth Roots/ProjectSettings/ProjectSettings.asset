@@ -12,7 +12,7 @@ PlayerSettings:
   targetDevice: 2
   useOnDemandResources: 0
   accelerometerFrequency: 60
-  companyName: DefaultCompany
+  companyName: GC squad
   productName: Earth Roots
   defaultCursor: {fileID: 0}
   cursorHotspot: {x: 0, y: 0}
@@ -268,7 +268,14 @@ PlayerSettings:
   AndroidMinifyDebug: 0
   AndroidValidateAppBundleSize: 1
   AndroidAppBundleSizeToValidate: 150
-  m_BuildTargetIcons: []
+  m_BuildTargetIcons:
+  - m_BuildTarget: 
+    m_Icons:
+    - serializedVersion: 2
+      m_Icon: {fileID: 2800000, guid: 10723654c70fe1f46b87e3bb73811641, type: 3}
+      m_Width: 128
+      m_Height: 128
+      m_Kind: 0
   m_BuildTargetPlatformIcons:
   - m_BuildTarget: iPhone
     m_Icons:
@@ -800,20 +807,20 @@ PlayerSettings:
   webGLThreadsSupport: 0
   webGLDecompressionFallback: 0
   scriptingDefineSymbols:
-    Android: CROSS_PLATFORM_INPUT;MOBILE_INPUT;UNITY_POST_PROCESSING_STACK_V2
-    EmbeddedLinux: UNITY_POST_PROCESSING_STACK_V2
-    GameCoreXboxOne: UNITY_POST_PROCESSING_STACK_V2
-    Lumin: UNITY_POST_PROCESSING_STACK_V2
-    Nintendo Switch: UNITY_POST_PROCESSING_STACK_V2
-    PS4: UNITY_POST_PROCESSING_STACK_V2
-    PS5: UNITY_POST_PROCESSING_STACK_V2
-    Stadia: UNITY_POST_PROCESSING_STACK_V2
-    Standalone: CROSS_PLATFORM_INPUT;UNITY_POST_PROCESSING_STACK_V2
-    WebGL: UNITY_POST_PROCESSING_STACK_V2
-    Windows Store Apps: MOBILE_INPUT;UNITY_POST_PROCESSING_STACK_V2
-    XboxOne: UNITY_POST_PROCESSING_STACK_V2
-    iPhone: CROSS_PLATFORM_INPUT;MOBILE_INPUT
-    tvOS: UNITY_POST_PROCESSING_STACK_V2
+    Android: CROSS_PLATFORM_INPUT;MOBILE_INPUT;UNITY_POST_PROCESSING_STACK_V2;CT_TPB
+    EmbeddedLinux: UNITY_POST_PROCESSING_STACK_V2;CT_TPB
+    GameCoreXboxOne: UNITY_POST_PROCESSING_STACK_V2;CT_TPB
+    Lumin: UNITY_POST_PROCESSING_STACK_V2;CT_TPB
+    Nintendo Switch: UNITY_POST_PROCESSING_STACK_V2;CT_TPB
+    PS4: UNITY_POST_PROCESSING_STACK_V2;CT_TPB
+    PS5: UNITY_POST_PROCESSING_STACK_V2;CT_TPB
+    Stadia: UNITY_POST_PROCESSING_STACK_V2;CT_TPB
+    Standalone: CROSS_PLATFORM_INPUT;UNITY_POST_PROCESSING_STACK_V2;CT_TPB
+    WebGL: UNITY_POST_PROCESSING_STACK_V2;CT_TPB
+    Windows Store Apps: MOBILE_INPUT;UNITY_POST_PROCESSING_STACK_V2;CT_TPB
+    XboxOne: UNITY_POST_PROCESSING_STACK_V2;CT_TPB
+    iPhone: CROSS_PLATFORM_INPUT;MOBILE_INPUT;CT_TPB
+    tvOS: UNITY_POST_PROCESSING_STACK_V2;CT_TPB
   additionalCompilerArguments: {}
   platformArchitecture: {}
   scriptingBackend: {}

@@ -72,6 +72,8 @@ namespace UnityStandardAssets.Characters.FirstPerson
             m_Jumping = false;
             m_AudioSource = GetComponent<AudioSource>();
 			m_MouseLook.Init(transform , m_Camera.transform);
+            m_AudioSource.volume = Variables.music;
+            _pickaxeAudioSource.volume = Variables.music;
             if (_scene.name == "BottomLevel")
             {
                 if (Variables.pickaxeAdd == 1)
@@ -89,12 +91,20 @@ namespace UnityStandardAssets.Characters.FirstPerson
             {
                 SceneManager.LoadScene("Menu");
             }
+            if (Input.GetKey(KeyCode.LeftShift))
+            {
+                m_WalkSpeed = 8;
+            }
+            else
+            {
+                m_WalkSpeed = 7;
+            }
             if (!Variables.gameOver)
             {
                 if (!m_AudioSource.isPlaying && m_CharacterController.velocity.sqrMagnitude > 0)
                 {
                     muted = false;
-                    m_AudioSource.volume = 1f;
+                    m_AudioSource.volume = Variables.music;
                     m_AudioSource.clip = m_FootstepSound;
                     m_AudioSource.Play();
                 }
@@ -123,19 +133,19 @@ namespace UnityStandardAssets.Characters.FirstPerson
                 }
                 if (player.position.y > -10f)
                 {
-                    _zoneTime = 2f;
+                    _zoneTime = 1f;
                     Variables.zone = 1;
                     _breakValue = 0.05f;
                 }
                 else if (player.position.y < -10f && player.position.y > -15f)
                 {
-                    _zoneTime = 5f;
+                    _zoneTime = 2f;
                     Variables.zone = 2;
                     _breakValue = 0.1f;
                 }
                 else if (player.position.y < -15f && player.position.y > -20f)
                 {
-                    _zoneTime = 10f;
+                    _zoneTime = 3f;
                     Variables.zone = 3;
                     _breakValue = 0.15f;
                 }
@@ -149,6 +159,11 @@ namespace UnityStandardAssets.Characters.FirstPerson
                 {
                     Mining();
                 }
+                if (_axeTrigger._isMinerZone == false)
+                {
+                    _anim.SetBool("IsDigging", false);
+                }
+                if(!Variables.isPaused)
                 RotateView();
                 // the jump state needs to read here to make sure it is not missed
 

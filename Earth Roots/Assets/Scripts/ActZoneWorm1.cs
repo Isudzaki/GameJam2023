@@ -80,10 +80,6 @@ public class ActZoneWorm1 : MonoBehaviour
           .Append(_textCloud.DOText("", 0.25f))
           .Append(_textCloud.DOText(_replicas[replic - 1], 1f));
     }
-    private void SpriteFade()
-    {
-        _Cloud.gameObject.SetActive(false);
-    }
     private void OnTriggerExit(Collider other)
     {
         if (other.gameObject.tag == "Player")
@@ -98,8 +94,7 @@ public class ActZoneWorm1 : MonoBehaviour
         _textCloud.DOFade(0, 0.3f);
         _Ebutton.DOFade(0, 0.3f);
         DOTween.Sequence()
-            .Append(_fadeAnim = _Cloud.DOFade(0, 0.3f))
-            .AppendCallback(SpriteFade);
+            .Append(_fadeAnim = _Cloud.DOFade(0, 0.3f));
     }
 }
 
